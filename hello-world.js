@@ -1,34 +1,49 @@
 // Blinks a led half-a-second
 
+// Make frameworks requirements
 var firebase = require("firebase");
 var five = require("johnny-five");
-var board = new five.Board();
 
+var board = new five.Board();   // Creates a new board
+
+// Main code
 board.on("ready", function() {
   
+  // Set up firebase initial configurations
   var server = firebase.initializeApp({
-  	//apiKey: "AIzaSyCOrMe3c_HP98AlClD8wYlrzGviKhQATMY",
-    //authDomain: "iot-blinking-led.firebaseapp.com",
-    //storageBucket: "iot-blinking-led.appspot.com",
-    databaseURL: "https://iot-blinking-led.firebaseio.com",
-    serviceAccount: "playground-iot-67bdb00abbee.json",
+    databaseURL: "https://playground-iot.firebaseio.com",
+    serviceAccount: "playground-iot-arduino-service-account.json",
   });
-  var database = firebase.database().ref("arduino/");
+  var database = firebase.database().ref("arduino/");   // Creates a firebase database reference in "/arduino/"
   
-  var button = new five.Button(5);
-  var led = new five.Led(3);
+  // Set up arduino pins
+  var button = new five.Button(5);    // There is a button at pin 5
+  var led = new five.Led(3);          // There is a LED at pin 13
+
   
   // Happens when the button is pressed
   button.on("down", function() {
-    database.set({"button": "off"});
-  	led.off();
-  	console.log("off");
+    database.set({"button": "off"});    // Writes on the database
+  	console.log("button: off");         // Writes on the console
   });
   
   // Happens when the button is released
   button.on("up", function() {
-    database.set({"button": "on"});
-  	led.on();
-  	console.log("on");
+    database.set({"button": "on"});     // Writes on the database
+  	console.log("button: on");          // Writes on the console
   });
+
+
+  // Reads the firebase server
+  database.on("value", function(snapshot) {
+    
+    // Reads the "button" status
+    if (snapshot.val().button == "on") {
+      led.on();   // Turns the LED on when button is pressed
+    }
+    else {
+      led.off();  // Turns the LED off when button is not pressed
+    }
+  });
+
 });
