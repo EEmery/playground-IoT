@@ -12,7 +12,7 @@ board.on("ready", function() {
   // Set up firebase initial configurations
   var server = firebase.initializeApp({
     databaseURL: "https://playground-iot.firebaseio.com",
-    serviceAccount: "playground-iot-arduino-service-account.json",
+    serviceAccount: "playground-iot-arduino-service-account-key.json",
   });
   var database = firebase.database().ref("arduino/");   // Creates a firebase database reference in "/arduino/"
   
