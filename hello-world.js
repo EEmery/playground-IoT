@@ -24,13 +24,11 @@ board.on("ready", function() {
   // Happens when the button is pressed
   button.on("down", function() {
     database.set({"button": "off"});    // Writes on the database
-  	console.log("button: off");         // Writes on the console
   });
   
   // Happens when the button is released
   button.on("up", function() {
     database.set({"button": "on"});     // Writes on the database
-  	console.log("button: on");          // Writes on the console
   });
 
 
@@ -40,9 +38,11 @@ board.on("ready", function() {
     // Reads the "button" status
     if (snapshot.val().button == "on") {
       led.on();   // Turns the LED on when button is pressed
+      console.log("button: on");          // Writes on the console
     }
     else {
       led.off();  // Turns the LED off when button is not pressed
+      console.log("button: off");         // Writes on the console
     }
   });
 
